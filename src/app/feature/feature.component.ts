@@ -35,7 +35,7 @@ export class FeatureComponent implements OnInit {
     let trackingMenu = {label: 'Giám sát', icon: 'pi pi-fw pi-filter', items: []};
 
     Array.from({length: 19}, (_, i) => `INV${i + 1}`)
-      .forEach((e, index) =>  trackingMenu.items.push({url: '/view/INV/'+(index+1), label: e, icon: 'pi pi-fw pi-chart-line'}))
+      .forEach((e, index) =>  trackingMenu.items.push({url: '/view/INV'+(index+1), label: e, icon: 'pi pi-fw pi-chart-line'}))
     this.fillerNav.push(trackingMenu)
   }
 

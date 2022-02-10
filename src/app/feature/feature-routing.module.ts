@@ -11,7 +11,7 @@ const routes: Routes = [
   {path: '', component: FeatureComponent,
     children: [
       {path: '', component: DashboardComponent},
-      {path: 'view/INV/:id', component: ElectricTrackingComponent}
+      {path: 'view/:tag', component: ElectricTrackingComponent}
     ]}
 ];
 

@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
       labels: ['INV1', 'INV2', 'INV3', 'INV4', 'INV5', 'INV6', 'INV7', 'INV8', 'INV9','INV10','INV11','INV12','INV13'],
       datasets: [
         {
-          label: 'E Total',
+          label: 'Tổng công suất',
           backgroundColor: '#006abe',
           data: [151215.36, 163097.56, 164649.6, 162982.72, 147056.92, 161902.88, 156665.84,156665.84,156665.84,156665.84,156665.84,156665.84]
         }

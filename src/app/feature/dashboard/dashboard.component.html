@@ -1,10 +1,10 @@
 <div class="card m-4">
   <h4>Thời gian cập nhật lần cuối: 15:00:00 ngày 26/02/2022</h4>
-  <p-splitter  [panelSizes]="[20,80]" [minSizes]="[20,0]"  styleClass="mb-5">
+  <p-splitter  [panelSizes]="[25,80]" [minSizes]="[22,0]"  styleClass="mb-5">
     <ng-template pTemplate>
 
       <div class="col">
-        <h2>E-Total: </h2>
+        <h2>Tổng công suất </h2>
         <p-card  *ngFor="let e of eTotalList"  header="{{e.tag}}" styleClass="m-3">
           <div class="w-full flex justify-content-center align-items-center">
             <p  class="const-value p-badge-danger" pBadge  severity="danger" [value]="'KWh'"
@@ -30,7 +30,7 @@
           <p-splitter [panelSizes]="[20,20]">
             <ng-template pTemplate>
               <div class="card w-full justify-content-center align-items-center" >
-                <h1 align="center">E Total</h1>
+                <h1 align="center">Tổng công suất nhà máy A trong ngày hôm nay</h1>
                 <p-chart   type="bar" [data]="basicData" [options]="verticalOptions"></p-chart>
               </div>
             </ng-template>

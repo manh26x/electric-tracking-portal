@@ -19,6 +19,12 @@ import {BadgeModule} from "primeng/badge";
 import {TagModule} from "primeng/tag";
 import {ChartModule} from "primeng/chart";
 import {ButtonModule} from "primeng/button";
+import {TableModule} from "primeng/table";
+import {MultiSelectModule} from "primeng/multiselect";
+import {RippleModule} from "primeng/ripple";
+import {FormsModule} from "@angular/forms";
+import {CalendarModule} from "primeng/calendar";
+import {AccordionModule} from "primeng/accordion";
 
 
 
@@ -28,24 +34,30 @@ import {ButtonModule} from "primeng/button";
     FeatureComponent,
     DashboardComponent
   ],
-    imports: [
-        CommonModule,
-        FeatureRoutingModule,
-        CardModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatRadioModule,
-        MatListModule,
-        MatToolbarModule,
-        MatIconModule,
-        MenuModule,
-        PanelMenuModule,
-        DividerModule,
-        SplitterModule,
-        BadgeModule,
-        TagModule,
-        ChartModule,
-        ButtonModule
-    ]
+  imports: [
+    CommonModule,
+    FeatureRoutingModule,
+    CardModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatListModule,
+    MatToolbarModule,
+    MatIconModule,
+    MenuModule,
+    PanelMenuModule,
+    DividerModule,
+    SplitterModule,
+    BadgeModule,
+    TagModule,
+    ChartModule,
+    ButtonModule,
+    FormsModule,
+    TableModule,
+    MultiSelectModule,
+    RippleModule,
+    CalendarModule,
+    AccordionModule
+  ]
 })
 export class FeatureModule { }

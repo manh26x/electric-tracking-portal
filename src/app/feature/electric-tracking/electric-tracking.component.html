@@ -1,8 +1,50 @@
-<p-card>
-  <div class="p-card-container blue-container flex align-items-center justify-content-start">
-    <div class="hidden w-4rem h-4rem bg-blue-500 text-white font-bold p-4 border-round mr-3">1</div>
-    <div class="w-4rem h-4rem bg-blue-500 text-white font-bold flex align-items-center justify-content-center p-4 border-round mr-3">2</div>
-    <div class="w-4rem h-4rem bg-blue-500 text-white font-bold flex align-items-center justify-content-center p-4 border-round">3</div>
-  </div>
+<h1>Thông số tag INV1</h1>
+<p-card styleClass="w-80 m-5">
+  <p-table  #dt [value]="tableData" scrollHeight="70vh"
+            [columns]="selectedColumns"
+            scrollDirection="both"
+            [virtualRowHeight]="40"
+            [virtualScroll]="true"
+            [scrollable]="true" [rows]="50"
+            selectionMode="multiple" [(selection)]="selectedList" [metaKeySelection]="true" dataKey="time"
+            styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+    <ng-template pTemplate="caption">
+
+      <div class="mb-5 flex justify-content-between align-items-start">
+        <div class="p-field w-3 ">
+          <label for="colChoose" class="w-full">Chọn cột hiển thị</label>
+          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                         inputId="colChoose"
+                         selectedItemsLabel="{0} columns selected" [style]="{minWidth: '300px'}"
+                         placeholder="Choose Columns"></p-multiSelect>
+        </div>
+        <div class="p-field w-3 ">
+          <label for="range" class="w-full">Khoảng thời gian</label>
+          <p-calendar styleClass="w-full" [(ngModel)]="rangeDates" [showTime]="true" selectionMode="range"
+                      [readonlyInput]="true" inputId="range" [showIcon]="true"  showButtonBar="true"></p-calendar>
+        </div>
+        <div class="p-field w-3 mt-3">
+          <p-button label="Search" icon="pi pi-search" iconPos="left" ></p-button>
+          <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success ml-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template  pTemplate="header" let-columns>
+      <tr>
+        <th rowspan="2" style="min-width:189px">Thời gian</th>
+        <th *ngFor="let title of columns" style="width:75px">{{title.header}}</th>
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-row  let-columns="columns" let-index="rowIndex">
+      <tr [pSelectableRow]="row" [pSelectableRowIndex]="index">
+        <td style="min-width:189px">{{row.time | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td style="width:75px" *ngFor="let col of columns">{{row['lastYearSale']}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+
+    </ng-template>
+  </p-table>
 </p-card>
 
