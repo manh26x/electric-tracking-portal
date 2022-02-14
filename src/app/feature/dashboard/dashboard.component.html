@@ -22,19 +22,25 @@
       <p-splitter layout="vertical" [style]="{'height': '100px'}" [panelSizes]="[15,85]" >
         <ng-template pTemplate>
           <div class="col flex align-items-end justify-content-end">
-            <p-button label="Cảnh báo" icon="pi pi-exclamation-triangle" styleClass="p-button-warning  mr-3" badge="8" badgeClass="p-badge-danger"></p-button>
-            <p-button label="Lỗi" icon="pi pi-exclamation-circle" styleClass="p-button-danger mr-3" badge="8" badgeClass="p-badge-info"></p-button>
+            <p-button label="Cảnh báo" icon="pi pi-exclamation-triangle" styleClass="p-button-warning  mr-3"  badge="{{totalError}}" badgeClass="p-badge-danger"></p-button>
+            <p-button label="Lỗi" icon="pi pi-exclamation-circle" styleClass="p-button-danger mr-3" badge="{{totalError}}" badgeClass="p-badge-info"></p-button>
           </div>
         </ng-template>
         <ng-template pTemplate>
-          <p-splitter [panelSizes]="[20,20]">
+          <p-splitter [panelSizes]="[80,80]">
             <ng-template pTemplate>
-              <div class="card w-full justify-content-center align-items-center" >
-                <h1 align="center">Tổng công suất nhà máy A trong ngày hôm nay</h1>
-                <p-chart   type="bar" [data]="basicData" [options]="verticalOptions"></p-chart>
+              <div class="card w-full justify-content-center" >
+                <div>
+                  <h1 align="center">Tổng công suất nhà máy </h1>
+                  <h2>Thời gian cập nhật đến: {{latestTime | date: 'dd/MM/yyyy HH:mm:ss'}}</h2>
+                  <p-chart height="75vh" type="bar" [data]="basicData" [options]="verticalOptions"></p-chart>
+                </div>
+
               </div>
+
             </ng-template>
           </p-splitter>
+
         </ng-template>
       </p-splitter>
     </ng-template>

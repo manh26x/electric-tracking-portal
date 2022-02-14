@@ -22,9 +22,12 @@ import {ButtonModule} from "primeng/button";
 import {TableModule} from "primeng/table";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CalendarModule} from "primeng/calendar";
 import {AccordionModule} from "primeng/accordion";
+import {HttpClientModule} from "@angular/common/http";
+import {FeatureService} from "./feature.service";
+import {PaginatorModule} from "primeng/paginator";
 
 
 
@@ -39,6 +42,7 @@ import {AccordionModule} from "primeng/accordion";
     FeatureRoutingModule,
     CardModule,
     MatSidenavModule,
+    HttpClientModule,
     MatButtonModule,
     MatRadioModule,
     MatListModule,
@@ -57,7 +61,10 @@ import {AccordionModule} from "primeng/accordion";
     MultiSelectModule,
     RippleModule,
     CalendarModule,
-    AccordionModule
-  ]
+    AccordionModule,
+    ReactiveFormsModule,
+    PaginatorModule
+  ],
+  providers: [FeatureService]
 })
 export class FeatureModule { }

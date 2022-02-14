@@ -5,15 +5,18 @@
             scrollDirection="both"
             [virtualRowHeight]="40"
             [virtualScroll]="true"
-            [scrollable]="true" [rows]="50"
+            [scrollable]="true"
+            [loading]="loading"
             selectionMode="multiple" [(selection)]="selectedList" [metaKeySelection]="true" dataKey="time"
+
             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
     <ng-template pTemplate="caption">
 
       <div class="mb-5 flex justify-content-between align-items-start">
+
         <div class="p-field w-3 ">
           <label for="colChoose" class="w-full">Chọn cột hiển thị</label>
-          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+          <p-multiSelect styleClass="w-full" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
                          inputId="colChoose"
                          selectedItemsLabel="{0} columns selected" [style]="{minWidth: '300px'}"
                          placeholder="Choose Columns"></p-multiSelect>
@@ -24,22 +27,29 @@
                       [readonlyInput]="true" inputId="range" [showIcon]="true"  showButtonBar="true"></p-calendar>
         </div>
         <div class="p-field w-3 mt-3">
-          <p-button label="Search" icon="pi pi-search" iconPos="left" ></p-button>
+          <p-button label="Search" icon="pi pi-search" iconPos="left" (onClick)="changePage(null)" ></p-button>
           <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success ml-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
         </div>
-      </div>
+      </div>      <p-paginator
+      (onPageChange)="changePage($event)"
+      [rows]="size" [showCurrentPageReport]="true"
+      [totalRecords]="totalItems"
+      [currentPage]="page"
+      currentPageReportTemplate="Hiển thị bản thứ {first} đến thứ {last} trong số {totalRecords} bản ghi" [rowsPerPageOptions]="[10,25,50]"
+    ></p-paginator>
+
     </ng-template>
     <ng-template  pTemplate="header" let-columns>
       <tr>
         <th rowspan="2" style="min-width:189px">Thời gian</th>
-        <th *ngFor="let title of columns" style="width:75px">{{title.header}}</th>
+        <th *ngFor="let title of columns" style="width:100px">{{title.header}}</th>
       </tr>
 
     </ng-template>
     <ng-template pTemplate="body" let-row  let-columns="columns" let-index="rowIndex">
       <tr [pSelectableRow]="row" [pSelectableRowIndex]="index">
         <td style="min-width:189px">{{row.time | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
-        <td style="width:75px" *ngFor="let col of columns">{{row['lastYearSale']}}</td>
+        <td style="width:100px" *ngFor="let col of columns">{{row.paramValue[col.field]}}</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="footer">

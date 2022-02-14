@@ -1,5 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import * as FileSaver from 'file-saver';
+import {FeatureService} from "../feature.service";
+import {ActivatedRoute, Route} from "@angular/router";
+import {FormBuilder} from "@angular/forms";
+import {DatePipe} from "@angular/common";
+import {pipe} from "rxjs";
 @Component({
   selector: 'app-electric-tracking',
   templateUrl: './electric-tracking.component.html',
@@ -13,39 +18,69 @@ export class ElectricTrackingComponent implements OnInit {
 
   cols: any[] = [];
   rangeDates: Date[];
-  private _selectedColumns: any[];
+  private _selectedColumns: any[] = [];
   selectedList = [];
-  constructor() { }
+  tagId: string;
+  formSearch: any;
+  size = 10;
+  page = 0;
+  totalItems = 0;
+  totalPages = 10;
+  loading = false;
+
+  constructor(
+    private featureService: FeatureService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
-    for(let i = 1; i <= 20; i ++) {
-      this.cols.push({ field: 'Upv'+i, header: 'Upv'+i});
-    }
-    for(let i = 1; i <= 20; i ++) {
-      this.cols.push({ field: 'Ipv'+i, header: 'Ipv'+i});
-    }
-    for(let i = 1; i <= 3; i ++) {
-      this.cols.push({ field: 'Uac'+i, header: 'Uac'+i});
-    }
-    this._selectedColumns = this.cols;
 
-    for(let i = 1; i <= 3; i ++) {
-      this.cols.push({ field: 'Iac'+i, header: 'Iac'+i});
-    }
-        this.tableData = [
-      {time: Date.parse('2022-02-16T12:12:12'), lastYearSale: 51, thisYearSale: 40, lastYearProfit: 54406, thisYearProfit: 43342},
-      {time: Date.parse('2022-02-16T12:13:12'), lastYearSale: 83, thisYearSale: 9, lastYearProfit: 423132, thisYearProfit: 312122},
-      {time: Date.parse('2022-02-16T12:14:12'), lastYearSale: 38, thisYearSale: 5, lastYearProfit: 12321, thisYearProfit: 8500},
-      {time: Date.parse('2022-02-16T12:15:12'), lastYearSale: 49, thisYearSale: 22, lastYearProfit: 745232, thisYearProfit: 65323},
-      {time: Date.parse('2022-02-16T12:16:12'), lastYearSale: 17, thisYearSale: 79, lastYearProfit: 643242, thisYearProfit: 500332},
-      {time: Date.parse('2022-02-16T12:17:12'), lastYearSale: 52, thisYearSale:  65, lastYearProfit: 421132, thisYearProfit: 150005},
-      {time: Date.parse('2022-02-16T12:18:12'), lastYearSale: 82, thisYearSale: 12, lastYearProfit: 131211, thisYearProfit: 100214},
-      {time: Date.parse('2022-02-16T12:19:12'), lastYearSale: 44, thisYearSale: 45, lastYearProfit: 66442, thisYearProfit: 53322},
-      {time: Date.parse('2022-02-16T12:20:12'), lastYearSale: 90, thisYearSale: 56, lastYearProfit: 765442, thisYearProfit: 296232},
-      {time: Date.parse('2022-02-16T12:21:12'), lastYearSale: 75, thisYearSale: 54, lastYearProfit: 21212, thisYearProfit: 12533}
-    ];
+    this.tagId = this.route.snapshot.paramMap.get('tag');
+    this.initForm();
+    this.onSearch();
 
+  }
+  pipe = new DatePipe('en-US');
 
+  onSearch() {
+    let paramValue = this.formSearch.value;
+    paramValue.fromDate =  this.pipe.transform(this.rangeDates[0], 'yyyy-MM-dd HH:mm:ss');
+    paramValue.toDate = this.pipe.transform(this.rangeDates[1],'yyyy-MM-dd HH:mm:ss');
+    paramValue.page = this.page;
+    paramValue.size = this.size;
+    this.loading = true;
+    this.featureService.getAnalysisTag(this.tagId, paramValue).subscribe(res => {
+      this.cols = [];
+      res.paramList.forEach(paramName => this.cols.push({ field: paramName, header: paramName}));
+      this.tableData = res.data;
+      if(this._selectedColumns.length === 0 ) {
+        this._selectedColumns = this.cols;
+
+      }
+      this.totalItems = res.totalItems;
+
+    }, _ => {}, () => this.loading = false);
+  }
+
+  initForm() {
+    let fromDate = new Date();
+    fromDate.setHours(0);
+    fromDate.setMinutes(0);
+    fromDate.setSeconds(0);
+    fromDate.setMilliseconds(0);
+    let toDate = new Date();
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate.setSeconds(59);
+    toDate.setMilliseconds(999);
+    this.formSearch = this.fb.group({
+      fromDate: [fromDate],
+      toDate: [toDate],
+      page: [this.page],
+      size: [this.size]
+    });
+    this.rangeDates = [fromDate, toDate];
   }
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
@@ -72,5 +107,15 @@ export class ElectricTrackingComponent implements OnInit {
       type: EXCEL_TYPE
     });
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+  changePage(event) {
+    if(event != null) {
+      this.page = event.page;
+      this.size = event.rows;
+    } else  {
+      this.page = 0;
+    }
+    this.onSearch();
   }
 }

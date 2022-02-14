@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FeatureService} from "../feature.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,29 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  eTotalList: Array<any> = [
-    {tag: '#INV1', tagCode: 'ESN:ES1990024910', time: Date.now(), paramValue: 151215.36},
-    {tag: '#INV2', tagCode: 'ESN:6T19B9050776', time: Date.now(), paramValue: 163097.56},
-    {tag: '#INV3', tagCode: 'ESN:6T19B9050776', time: Date.now(), paramValue: 163097.56},
-    {tag: '#INV4', tagCode: 'ESN:6T19B9050776', time: Date.now(), paramValue: 163097.56},
-    {tag: '#INV5', tagCode: 'ESN:6T19B9050776', time: Date.now(), paramValue: 163097.56},
-  ];
+  eTotalList: Array<any> = [];
   basicData: any;
-  private verticalOptions:any;
+  verticalOptions:any;
+  latestTime: any;
+  totalError = 0;
+  private temp: any;
+  chartOptions: any;
 
-  constructor() { }
+  constructor(
+    private featureService: FeatureService
+  ) { }
 
   ngOnInit(): void {
     this.basicData = {
-      labels: ['INV1', 'INV2', 'INV3', 'INV4', 'INV5', 'INV6', 'INV7', 'INV8', 'INV9','INV10','INV11','INV12','INV13'],
+      labels: [],
       datasets: [
         {
           label: 'Tổng công suất',
-          backgroundColor: '#006abe',
-          data: [151215.36, 163097.56, 164649.6, 162982.72, 147056.92, 161902.88, 156665.84,156665.84,156665.84,156665.84,156665.84,156665.84]
+          backgroundColor: '#ee4035',
+          data: []
         }
       ]
     };
+    this.chartOptions = this.getLightTheme();
     this.verticalOptions = {
       indexAxis: 'y',
       plugins: {
@@ -58,7 +60,68 @@ export class DashboardComponent implements OnInit {
         }
       }
     };
+    this.temp = {
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          "#42A5F5",
+          "#66BB6A",
+          "#FFA726",
+          "#26C6DA",
+          "#7E57C2",
+          "#fe4a49", "#2ab7ca", "#fed766", "#e6e6ea", "#f4f4f8",
+          "#051e3e", "#251e3e", "#451e3e", "#651e3e", "#851e3e",
+          "#4a4e4d", "#0e9aa7", "#3da4ab", "#f6cd61", "#fe8a71",
+          "#ee4035", "#f37736", "#fdf498", "#7bc043", "#0392cf"
+
+  ],
+        label: 'My dataset'
+      }],
+      labels: [
+        "Red"]
+    };
+    this.featureService.getDashboard().subscribe(res => {
+      this.eTotalList = [];
+      this.basicData.labels = [];
+      this.basicData.datasets.data = [];
+      this.latestTime = res.time;
+      this.totalError = res.totalError;
+      this.temp.labels = [];
+      res.temp.forEach( v => {
+        this.temp.labels.push(v.tagName);
+        this.temp.datasets[0].data.push(v.value);
+      })
+      res.etotal.forEach(paramValue => {
+        this.eTotalList.push({
+          tag: paramValue.tagName,
+          tagCode: paramValue.tagCode,
+          time: res.time,
+          paramValue: paramValue.value
+        });
+        this.basicData.labels.push(paramValue.tagName);
+
+        this.basicData.datasets[0].data.push(paramValue.value)
+      })
+    })
+
 
   }
-
+  getLightTheme() {
+    return {
+      plugins: {
+        legend: {
+          labels: {
+            color: '#495057'
+          }
+        }
+      },
+      scales: {
+        r: {
+          grid: {
+            color: '#ebedef'
+          }
+        }
+      }
+    }
+  }
 }
