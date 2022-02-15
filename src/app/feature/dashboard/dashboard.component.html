@@ -1,31 +1,40 @@
 <div class="card m-4">
-  <h4>Thời gian cập nhật lần cuối: 15:00:00 ngày 26/02/2022</h4>
-  <p-splitter  [panelSizes]="[25,80]" [minSizes]="[22,0]"  styleClass="mb-5">
-    <ng-template pTemplate>
+  <p-splitter
+    layout="vertical" [style]="{'height': '100px'}" [panelSizes]="[15,85]">
 
-      <div class="col">
-        <h2>Tổng công suất </h2>
-        <p-card  *ngFor="let e of eTotalList"  header="{{e.tag}}" styleClass="m-3">
-          <div class="w-full flex justify-content-center align-items-center">
-            <p  class="const-value p-badge-danger" pBadge  severity="danger" [value]="'KWh'"
-            >{{e.paramValue}}</p>
-          </div>
-          <ng-template pTemplate="footer" >
-            <div class="w-full flex justify-content-end align-items-end">
-            <p-tag value="{{e.tagCode}}" ></p-tag>
-            </div>
-          </ng-template>
-        </p-card>
+    <ng-template pTemplate>
+      <div class="col flex align-items-end justify-content-end">
+        <p-button label="Cảnh báo" icon="pi pi-exclamation-triangle" styleClass="p-button-warning  mr-3"  badge="{{totalError}}" badgeClass="p-badge-danger"></p-button>
+        <p-button label="Lỗi" icon="pi pi-exclamation-circle" styleClass="p-button-danger mr-3" badge="{{totalError}}" badgeClass="p-badge-info"></p-button>
       </div>
     </ng-template>
     <ng-template pTemplate>
-      <p-splitter layout="vertical" [style]="{'height': '100px'}" [panelSizes]="[15,85]" >
+      <p-splitter     layout="vertical" [panelSizes]="[25,80]" [minSizes]="[22,0]"  styleClass="mb-5">
         <ng-template pTemplate>
-          <div class="col flex align-items-end justify-content-end">
-            <p-button label="Cảnh báo" icon="pi pi-exclamation-triangle" styleClass="p-button-warning  mr-3"  badge="{{totalError}}" badgeClass="p-badge-danger"></p-button>
-            <p-button label="Lỗi" icon="pi pi-exclamation-circle" styleClass="p-button-danger mr-3" badge="{{totalError}}" badgeClass="p-badge-info"></p-button>
+
+          <div class="col">
+            <h2>Tổng công suất </h2>
+            <h2>Thời gian cập nhật đến: {{latestTime | date: 'dd/MM/yyyy HH:mm:ss'}}</h2>
+            <div class="grid  grid-nogutter" id="gridInv">
+              <div  *ngFor="let e of eTotalList"  class="col-2">
+                <p-card  styleClass="m-1">
+                  <ng-template pTemplate="header" >
+                    <h1 class="ml-1" >{{e.tag}} <p-badge [style]="{'font-size': '8pt'}" value="{{e.tagCode}}"></p-badge></h1>
+                  </ng-template>
+                  <ng-template pTemplate="body" style="padding: 0!important;" >
+                    <div class="w-full flex justify-content-center align-items-center">
+                      <p  class="const-value p-badge-danger" pBadge  severity="danger" [value]="'KWh'"
+                      >{{e.paramValue}}</p>
+                    </div>
+                  </ng-template>
+
+
+                </p-card>
+              </div>
+            </div>
           </div>
         </ng-template>
+
         <ng-template pTemplate>
           <p-splitter [panelSizes]="[80,80]">
             <ng-template pTemplate>
@@ -33,7 +42,7 @@
                 <div>
                   <h1 align="center">Tổng công suất nhà máy </h1>
                   <h2>Thời gian cập nhật đến: {{latestTime | date: 'dd/MM/yyyy HH:mm:ss'}}</h2>
-                  <p-chart height="75vh" type="bar" [data]="basicData" [options]="verticalOptions"></p-chart>
+                  <p-chart #uiChart height="75vh" type="bar" [data]="basicData" [options]="verticalOptions"></p-chart>
                 </div>
 
               </div>

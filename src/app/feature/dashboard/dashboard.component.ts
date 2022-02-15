@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FeatureService} from "../feature.service";
+import {BehaviorSubject} from "rxjs";
+import {Chart} from "chart.js";
+import {UIChart} from "primeng/chart";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +18,7 @@ export class DashboardComponent implements OnInit {
   totalError = 0;
   private temp: any;
   chartOptions: any;
-
+  @ViewChild('uiChart') uiChart: UIChart;
   constructor(
     private featureService: FeatureService
   ) { }
@@ -33,7 +36,7 @@ export class DashboardComponent implements OnInit {
     };
     this.chartOptions = this.getLightTheme();
     this.verticalOptions = {
-      indexAxis: 'y',
+      indexAxis: 'x',
       plugins: {
         legend: {
           labels: {
@@ -98,10 +101,12 @@ export class DashboardComponent implements OnInit {
           time: res.time,
           paramValue: paramValue.value
         });
-        this.basicData.labels.push(paramValue.tagName);
+        this.uiChart.data.labels.push(paramValue.tagName);
 
-        this.basicData.datasets[0].data.push(paramValue.value)
-      })
+        this.uiChart.data.datasets[0].data.push(paramValue.value)
+      });
+      this.uiChart.data.datasets = this.basicData.datasets;
+      this.uiChart.refresh();
     })
 
 
